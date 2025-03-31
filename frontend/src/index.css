@@ -1,4 +1,14 @@
+@import 'animate.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
+  --animate-duration: 800ms;
+  --animate-delay: 0.2s;
+  --primary-color: #ff71ce;
+  --secondary-color: #01cdfe;
+  --accent-color: #ffda00;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -28,6 +38,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #0f0f1a;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -65,4 +77,34 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Custom utility classes for animation speeds */
+.animate-fast {
+  --animate-duration: 400ms !important;
+}
+
+.animate-slow {
+  --animate-duration: 1.2s !important;
+}
+
+.animate-very-slow {
+  --animate-duration: 2s !important;
+}
+
+/* Custom hover animations */
+.hover-grow {
+  transition: transform 0.3s ease;
+}
+
+.hover-grow:hover {
+  transform: scale(1.05);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(255, 113, 206, 0.7);
 }

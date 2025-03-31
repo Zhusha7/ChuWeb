@@ -4,6 +4,14 @@ const API_BASE_URL = 'https://localhost:7001/api';
 // Fallback to HTTP if HTTPS fails
 const API_FALLBACK_URL = 'http://localhost:5001/api';
 
+type ContactFormData = {
+  name: string;
+  email: string;
+  message: string;
+};
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
 export const api = {
     async getHello() {
         try {
@@ -44,6 +52,27 @@ export const api = {
             }
         } catch (error) {
             console.error('API Error:', error);
+            throw error;
+        }
+    },
+    
+    contact: async (data: ContactFormData) => {
+        try {
+            const response = await fetch(`${API_URL}/api/contact`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('API contact error:', error);
             throw error;
         }
     }
