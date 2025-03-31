@@ -1,0 +1,8 @@
+// Not used - we'll use Tailwind CLI directly
+
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+} 

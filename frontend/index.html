@@ -1,13 +1,474 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>CatherineChu</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'pastel-pink': '#ffb7d5',
+              'pastel-blue': '#b7e3ff',
+              'pastel-yellow': '#ffeda3',
+              'bg-blue': '#e6f2ff',
+              'bg-dark-blue': '#c6e6ff',
+            },
+            borderRadius: {
+              'bevel': '12px',
+            },
+            maxWidth: {
+              'narrow': '900px',
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+      :root {
+        --animate-duration: 800ms;
+        --animate-delay: 0.2s;
+      }
+      .animate-fast {
+        --animate-duration: 400ms !important;
+      }
+      .animate-slow {
+        --animate-duration: 1.2s !important;
+      }
+      .animate-very-slow {
+        --animate-duration: 2s !important;
+      }
+      .hover-grow {
+        transition: transform 0.3s ease;
+      }
+      .hover-grow:hover {
+        transform: scale(1.05);
+      }
+      .hover-glow {
+        transition: box-shadow 0.3s ease;
+      }
+      .hover-glow:hover {
+        box-shadow: 0 0 15px rgba(255, 183, 213, 0.7);
+      }
+      body {
+        background-color: #e6f2ff;
+        font-family: system-ui, -apple-system, sans-serif;
+        color: #444;
+        overflow-x: hidden;
+      }
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 100;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+      }
+      .modal-content {
+        position: relative;
+        margin: 10% auto;
+        padding: 20px;
+        max-width: 500px;
+      }
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-bg-dark-blue bg-opacity-90 shadow-lg">
+      <div class="max-w-narrow mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center animate__animated animate__fadeInLeft">
+          <div class="font-bold text-2xl text-pastel-pink">CatherineChu</div>
+        </div>
+        
+        <div class="hidden md:flex space-x-8 items-center animate__animated animate__fadeInRight">
+          <a href="#home" class="text-gray-700 hover:text-pastel-pink transition-colors hover-grow">
+            Home
+          </a>
+          <a href="#stream" class="text-gray-700 hover:text-pastel-pink transition-colors hover-grow">
+            Stream
+          </a>
+          <a href="#blog" class="text-gray-700 hover:text-pastel-pink transition-colors hover-grow">
+            Blog
+          </a>
+          <a href="#music" class="text-gray-700 hover:text-pastel-pink transition-colors hover-grow">
+            Music
+          </a>
+        </div>
+        
+        <div class="flex space-x-4 animate__animated animate__fadeInRight">
+          <a 
+            href="https://www.twitch.tv/chucatherine" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-gray-700 hover:text-pastel-pink transition-colors"
+          >
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"></path>
+            </svg>
+          </a>
+          <a 
+            href="https://vk.com/caerithe" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-gray-700 hover:text-pastel-pink transition-colors"
+          >
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 576 512" aria-hidden="true">
+              <path d="M545 117.7c3.7-12.5 0-21.7-17.8-21.7h-58.9c-15 0-21.9 7.9-25.6 16.7 0 0-30 73.1-72.4 120.5-13.7 13.7-20 18.1-27.5 18.1-3.7 0-9.4-4.4-9.4-16.9V117.7c0-15-4.2-21.7-16.6-21.7h-92.6c-9.4 0-15 7-15 13.5 0 14.2 21.2 17.5 23.4 57.5v86.8c0 19-3.4 22.5-10.9 22.5-20 0-68.6-73.4-97.4-157.4-5.8-16.3-11.5-22.9-26.6-22.9H38.8c-16.8 0-20.2 7.9-20.2 16.7 0 15.6 20 93.1 93.1 195.5C160.4 378.1 229 416 291.4 416c37.5 0 42.1-8.4 42.1-22.9 0-66.8-3.4-73.1 15.4-73.1 8.7 0 23.7 4.4 58.7 38.1 40 40 46.6 57.9 69 57.9h58.9c16.8 0 25.3-8.4 20.4-25-11.2-34.9-86.9-106.7-90.3-111.5-8.7-11.2-6.2-16.2 0-26.2.1-.1 72-101.3 79.4-135.6z"/>
+            </svg>
+          </a>
+          <a 
+            href="https://t.me/chucatherinevt" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-gray-700 hover:text-pastel-pink transition-colors"
+          >
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="min-h-screen pt-24 pb-12 px-4 md:px-8" id="home">
+      <div class="max-w-narrow mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <!-- Hero Content -->
+          <div class="order-2 lg:order-1">
+            <div class="animate__animated animate__fadeInLeft">
+              <h1 class="text-4xl md:text-5xl font-bold text-gray-700 mb-4">
+                Welcome to <span class="text-pastel-pink">ChuCatherine's</span> World
+              </h1>
+            </div>
+            
+            <div class="animate__animated animate__fadeInLeft animate__delay-1s">
+              <p class="text-xl text-gray-600 mb-6">
+                Streamer, Content Creator, and Digital Artist
+              </p>
+            </div>
+            
+            <div class="animate__animated animate__fadeInUp animate__delay-2s">
+              <p class="text-gray-500 mb-8">
+                Join me on my journey through gaming, art, and creative content.
+                Let's build an amazing community together!
+              </p>
+            </div>
+            
+            <div class="animate__animated animate__fadeInUp animate__delay-3s">
+              <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                <a 
+                  href="#stream" 
+                  class="bg-pastel-pink hover:bg-pink-400 text-gray-700 font-medium py-3 px-6 rounded-bevel transition-colors hover-grow"
+                >
+                  Watch Stream
+                </a>
+                <button 
+                  id="contactBtn"
+                  class="bg-transparent border-2 border-pastel-blue hover:bg-pastel-blue hover:bg-opacity-50 text-gray-700 font-medium py-3 px-6 rounded-bevel transition-colors hover-grow"
+                >
+                  Get in Touch
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Hero Image -->
+          <div class="order-1 lg:order-2 relative">
+            <div class="animate__animated animate__fadeInRight">
+              <div class="relative z-10">
+                <img 
+                  src="/redhead-woman.jpg" 
+                  alt="ChuCatherine" 
+                  class="w-full max-w-lg mx-auto rounded-bevel shadow-2xl"
+                />
+              </div>
+            </div>
+            
+            <!-- Decorative Elements -->
+            <div class="absolute top-[-20px] right-[-20px] w-[150px] h-[150px] bg-pastel-blue rounded-full opacity-60 blur-2xl animate__animated animate__slideInRight"></div>
+            <div class="absolute bottom-[-30px] left-[-30px] w-[180px] h-[180px] bg-pastel-pink rounded-full opacity-50 blur-2xl animate__animated animate__slideInLeft"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+      <div class="modal-content bg-white p-6 rounded-bevel shadow-xl max-w-md">
+        <span class="close text-pastel-pink">&times;</span>
+        <h3 class="text-2xl font-semibold text-gray-700 mb-4 animate__animated animate__fadeIn">
+          Send me a message
+        </h3>
+        <form id="contactForm" class="space-y-4">
+          <div class="animate__animated animate__fadeInUp animate__delay-1s">
+            <label for="name" class="block text-sm font-medium text-gray-600 mb-1">
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full bg-pastel-blue bg-opacity-10 text-gray-700 border border-pastel-blue rounded-bevel px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all hover-grow"
+              placeholder="Your name"
+            />
+          </div>
+          
+          <div class="animate__animated animate__fadeInUp animate__delay-2s">
+            <label for="email" class="block text-sm font-medium text-gray-600 mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full bg-pastel-blue bg-opacity-10 text-gray-700 border border-pastel-blue rounded-bevel px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all hover-grow"
+              placeholder="your.email@example.com"
+            />
+          </div>
+          
+          <div class="animate__animated animate__fadeInUp animate__delay-3s">
+            <label for="message" class="block text-sm font-medium text-gray-600 mb-1">
+              Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows="4"
+              class="w-full bg-pastel-blue bg-opacity-10 text-gray-700 border border-pastel-blue rounded-bevel px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pastel-pink transition-all hover-grow"
+              placeholder="Your message..."
+            ></textarea>
+          </div>
+          
+          <div class="animate__animated animate__fadeInUp animate__delay-4s">
+            <button
+              type="submit"
+              class="w-full bg-pastel-pink hover:bg-pink-400 text-gray-700 font-medium py-2 px-4 rounded-bevel transition-colors hover-grow"
+            >
+              Send Message
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-narrow mx-auto px-4 pb-24">
+      <!-- Twitch Stream Section -->
+      <section class="mb-16" id="stream">
+        <div class="animate__animated animate__fadeIn">
+          <h2 class="text-3xl font-bold mb-6 text-pastel-pink">Latest Stream</h2>
+        </div>
+        <div class="rounded-bevel overflow-hidden shadow-lg bg-pastel-blue bg-opacity-30 p-2">
+          <div class="text-xl font-semibold text-pastel-pink mb-2 px-2 animate__animated animate__backInUp">
+            Live Stream
+          </div>
+          
+          <div class="rounded-bevel overflow-hidden">
+            <div id="twitch-embed" style="height: 450px"></div>
+          </div>
+          
+          <div class="text-sm text-gray-600 mt-2 px-2 animate__animated animate__fadeIn animate__delay-1s">
+            Follow me on <a href="https://www.twitch.tv/chucatherine" target="_blank" rel="noopener noreferrer" class="text-pastel-pink hover:underline">Twitch</a> for live streams!
+          </div>
+        </div>
+      </section>
+      
+      <!-- Latest Updates Section -->
+      <section class="mb-20">
+        <div class="animate__animated animate__fadeIn">
+          <h2 class="text-3xl font-bold mb-6 text-pastel-pink">Latest Updates</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Blog Card -->
+          <div class="animate__animated animate__fadeInUp">
+            <div class="bg-white rounded-bevel p-6 shadow-md hover-grow hover-glow h-[360px]">
+              <h3 class="text-xl font-semibold mb-4 text-pastel-blue">Blog</h3>
+              <div class="h-[160px] bg-pastel-blue bg-opacity-20 flex items-center justify-center mb-4 rounded-bevel">
+                <span class="text-pastel-blue">Blog Post</span>
+              </div>
+              <p class="text-gray-500 mb-4">
+                Check out my latest blog posts about gaming and streaming!
+              </p>
+              <a 
+                href="#blog" 
+                class="inline-block bg-pastel-blue text-gray-700 px-4 py-2 rounded-bevel hover:bg-blue-300 transition-colors"
+              >
+                Read Blog
+              </a>
+            </div>
+          </div>
+          
+          <!-- Music Card -->
+          <div class="animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="bg-white rounded-bevel p-6 shadow-md hover-grow hover-glow h-[360px]">
+              <h3 class="text-xl font-semibold mb-4 text-pastel-pink">Music</h3>
+              <div class="h-[160px] bg-pastel-pink bg-opacity-20 flex items-center justify-center mb-4 rounded-bevel">
+                <span class="text-pastel-pink">Music</span>
+              </div>
+              <p class="text-gray-500 mb-4">
+                Listen to my stream playlists and favorite tracks.
+              </p>
+              <a 
+                href="#music" 
+                class="inline-block bg-pastel-pink text-gray-700 px-4 py-2 rounded-bevel hover:bg-pink-400 transition-colors"
+              >
+                Listen Now
+              </a>
+            </div>
+          </div>
+          
+          <!-- Social Media Card -->
+          <div class="animate__animated animate__fadeInUp animate__delay-2s">
+            <div class="bg-white rounded-bevel p-6 shadow-md hover-grow hover-glow h-[360px]">
+              <h3 class="text-xl font-semibold mb-4 text-pastel-pink">Social</h3>
+              <div class="h-[160px] bg-gradient-to-r from-pastel-blue to-pastel-pink bg-opacity-20 flex items-center justify-center mb-4 rounded-bevel">
+                <span class="text-pastel-pink">Social Updates</span>
+              </div>
+              <p class="text-gray-500 mb-4">
+                Follow me on social media for the latest updates.
+              </p>
+              <a 
+                href="#social" 
+                class="inline-block bg-pastel-pink text-gray-700 px-4 py-2 rounded-bevel hover:bg-pink-400 transition-colors"
+              >
+                Connect
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <!-- Footer -->
+    <div class="pb-12 px-4">
+      <footer class="max-w-narrow mx-auto bg-bg-dark-blue rounded-bevel p-8 shadow-md">
+        <div class="animate__animated animate__bounceIn">
+          <h2 class="text-2xl font-bold mb-6 text-pastel-pink">CatherineChu</h2>
+        </div>
+        
+        <div class="animate__animated animate__fadeIn">
+          <div class="flex space-x-6 mb-6">
+            <a 
+              href="https://www.twitch.tv/chucatherine" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-gray-600 hover:text-pastel-pink transition-colors"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"></path>
+              </svg>
+            </a>
+            <a 
+              href="https://vk.com/caerithe" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-gray-600 hover:text-pastel-pink transition-colors"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 576 512" aria-hidden="true">
+                <path d="M545 117.7c3.7-12.5 0-21.7-17.8-21.7h-58.9c-15 0-21.9 7.9-25.6 16.7 0 0-30 73.1-72.4 120.5-13.7 13.7-20 18.1-27.5 18.1-3.7 0-9.4-4.4-9.4-16.9V117.7c0-15-4.2-21.7-16.6-21.7h-92.6c-9.4 0-15 7-15 13.5 0 14.2 21.2 17.5 23.4 57.5v86.8c0 19-3.4 22.5-10.9 22.5-20 0-68.6-73.4-97.4-157.4-5.8-16.3-11.5-22.9-26.6-22.9H38.8c-16.8 0-20.2 7.9-20.2 16.7 0 15.6 20 93.1 93.1 195.5C160.4 378.1 229 416 291.4 416c37.5 0 42.1-8.4 42.1-22.9 0-66.8-3.4-73.1 15.4-73.1 8.7 0 23.7 4.4 58.7 38.1 40 40 46.6 57.9 69 57.9h58.9c16.8 0 25.3-8.4 20.4-25-11.2-34.9-86.9-106.7-90.3-111.5-8.7-11.2-6.2-16.2 0-26.2.1-.1 72-101.3 79.4-135.6z"/>
+              </svg>
+            </a>
+            <a 
+              href="https://t.me/chucatherinevt" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="text-gray-600 hover:text-pastel-pink transition-colors"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="animate__animated animate__fadeIn animate__delay-1s">
+          <div class="text-gray-500 text-sm">
+            &copy; <span id="currentYear"></span> CatherineChu. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <script>
+      // Set current year in footer
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+      // Modal functionality
+      const modal = document.getElementById('contactModal');
+      const btn = document.getElementById('contactBtn');
+      const span = document.getElementsByClassName('close')[0];
+      
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+      
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+      
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+
+      // Contact form handling
+      document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        alert('Thank you for your message! I\'ll get back to you soon.');
+        modal.style.display = "none";
+        this.reset();
+      });
+
+      // Create a Twitch.Embed object
+      window.onload = function() {
+        new Twitch.Embed("twitch-embed", {
+          width: "100%",
+          height: "100%",
+          channel: "chucatherine",
+          parent: ["localhost"]
+        });
+      }
+
+      // Scroll animations with Intersection Observer
+      document.addEventListener('DOMContentLoaded', function() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, {
+          threshold: 0.1
+        });
+
+        document.querySelectorAll('.animate__animated:not(.animate__infinite)').forEach(el => {
+          observer.observe(el);
+        });
+      });
+    </script>
   </body>
 </html>

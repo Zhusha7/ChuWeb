@@ -36,3 +36,6 @@ build/
 *.ntvs*
 *.njsproj
 *.sln 
+
+# DevTrajectory
+DevTrajectory.md

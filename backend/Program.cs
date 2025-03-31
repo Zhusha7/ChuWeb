@@ -34,12 +34,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     
     // Create/update database tables
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<BlogDbContext>();
-        // This will create the database if it doesn't exist and create all tables based on the model
-        dbContext.Database.EnsureCreated();
-    }
+    // using (var scope = app.Services.CreateScope())
+    // {
+    //     var dbContext = scope.ServiceProvider.GetRequiredService<BlogDbContext>();
+    //     // This will create the database if it doesn't exist and create all tables based on the model
+    //     dbContext.Database.EnsureCreated();
+    // }
 }
 
 app.UseHttpsRedirection();
